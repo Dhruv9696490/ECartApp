@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "975334248178",
+    "project_id": "ecartapp-e8205",
+    "storage_bucket": "ecartapp-e8205.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975334248178:android:0300e6369e0d9a420b4a6b",
+        "android_client_info": {
+          "package_name": "com.example.ecartapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIpw_7wYg8eujrPs8hejrUHtiAh6V1zUY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
