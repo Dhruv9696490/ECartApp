@@ -3,9 +3,11 @@ package com.example.ecartapp
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.ecartapp.model.UserModel
 import com.google.firebase.Firebase
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
+
 
 class ECartViewModel: ViewModel() {
     val auth= Firebase.auth
@@ -22,18 +24,21 @@ class ECartViewModel: ViewModel() {
             _eCartState.value= ECartState.Authenticated
         }
     }
-    fun sign(name: String,email: String,password: String){
+    fun sign(name: String,email: String,password: String,phoneNumber: String){
             _eCartState.value= ECartState.Loading
             auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener{result->
                 if(result.isSuccessful){
-                    val profile = UserProfileChangeRequest.Builder().setDisplayName(name).build()
-                    auth.currentUser?.updateProfile(profile)?.addOnCompleteListener{
-                        if(it.isSuccessful){
-                            _eCartState.value= ECartState.Authenticated
-                        }else{
-                            _eCartState.value= ECartState.Error(it.exception?.message?: "404")
+                    val uid = result.result?.user?.uid
+                    val userModel = UserModel(name,email,uid!!,emptyMap(),phoneNumber,)
+                    fireStore.collection("users").document(uid).set(userModel)
+                        .addOnCompleteListener {result->
+                            if (result.isSuccessful){
+                                _eCartState.value= ECartState.Authenticated
+                            }
+                           else{
+                                _eCartState.value= ECartState.Error(result.exception?.message?: "404")
+                            }
                         }
-                    }
                 }else{
                     _eCartState.value= ECartState.Error(result.exception?.message?: "404")
                 }

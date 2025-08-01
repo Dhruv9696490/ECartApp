@@ -40,9 +40,10 @@ import com.example.ecartapp.ECartViewModel
 import com.example.ecartapp.R
 
 @Composable
-fun SighUpScreen(modifier: Modifier, navController: NavHostController, viewModel: ECartViewModel) {
+fun SighUpScreen(modifier: Modifier, navController: NavHostController, viewModel: ECartViewModel){
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    var phoneNumber by remember { mutableStateOf("") }
     var password by remember {mutableStateOf("")}
     val context =LocalContext.current
     LaunchedEffect(viewModel.eCartState.value){
@@ -86,6 +87,12 @@ fun SighUpScreen(modifier: Modifier, navController: NavHostController, viewModel
             placeholder = {Text("Enter your email")},
             modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(6.dp)))
         Spacer(modifier = Modifier.height(4.dp))
+        OutlinedTextField(value = phoneNumber,
+            onValueChange = {phoneNumber=it},
+            label = {Text("Mobile No.")},
+            placeholder = {Text("Enter your Mobile Number")},
+            modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(6.dp)))
+        Spacer(modifier = Modifier.height(4.dp))
         OutlinedTextField(value = password,
             onValueChange = {password=it},
             label = {Text("Password")},
@@ -94,8 +101,8 @@ fun SighUpScreen(modifier: Modifier, navController: NavHostController, viewModel
             visualTransformation = PasswordVisualTransformation())
         Spacer(modifier = Modifier.height(4.dp))
         Button(onClick = {
-            if(name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()){
-                viewModel.sign(name,email,password)
+            if(name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && phoneNumber.isNotEmpty()){
+                viewModel.sign(name,email,password,phoneNumber)
             }else{
                 Toast.makeText(context,"enter the login details", Toast.LENGTH_LONG).show()
             }

@@ -38,7 +38,7 @@ fun AuthScreen(modifier: Modifier, navController: NavHostController, viewModel: 
             else -> Unit
         }
     }
-    Column(modifier.fillMaxSize().padding(8.dp),
+    Column(Modifier.fillMaxSize().padding(vertical = 8.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally){
         Image(painter = painterResource(id = R.drawable.sho2),null,
