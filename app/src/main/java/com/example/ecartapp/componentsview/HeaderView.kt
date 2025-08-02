@@ -40,7 +40,7 @@ fun HeaderView(modifier: Modifier){
         horizontalArrangement = Arrangement.SpaceBetween){
         Column{
             Text("Welcome Back!", fontSize = 32.sp,
-                color = Color.Gray)
+                color = Color.DarkGray)
             Text(name,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.SemiBold,

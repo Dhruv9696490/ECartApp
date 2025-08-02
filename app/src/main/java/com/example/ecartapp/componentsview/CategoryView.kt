@@ -25,13 +25,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.ecartapp.model.IconCategoryModel
 import com.example.ecartapp.GlobalNavigation
+import com.example.ecartapp.model.IconCategoryModel
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
 @Composable
-fun CategoryView(modifier: Modifier){
+fun CategoryView(){
     var categories by remember {  mutableStateOf<List<IconCategoryModel>>(emptyList())}
     LaunchedEffect(Unit){
         Firebase.firestore.collection("data").document("icons").collection("categories")

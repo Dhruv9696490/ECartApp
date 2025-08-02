@@ -105,8 +105,8 @@ fun CategoryItemsScreen(item: CategoryModel) {
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
     ){
         Box(){
-            IconButton(onClick = {}, modifier = Modifier.size(60.dp).align(alignment = Alignment.TopEnd)){
-                Icon(Icons.Default.FavoriteBorder,null)
+            IconButton(onClick = {}, modifier = Modifier.size(40.dp).align(alignment = Alignment.TopEnd)){
+                Icon(Icons.Default.FavoriteBorder,null, modifier = Modifier.size(30.dp))
             }
             Column(
                 modifier = Modifier.padding(top = 30.dp),

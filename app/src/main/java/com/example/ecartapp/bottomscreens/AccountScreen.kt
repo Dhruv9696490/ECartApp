@@ -14,8 +14,13 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -37,9 +42,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.ecartapp.ECartState
-import com.example.ecartapp.ECartViewModel
 import com.example.ecartapp.GlobalNavigation
 import com.example.ecartapp.R
 import com.example.ecartapp.Utils
@@ -50,38 +52,43 @@ import com.google.firebase.firestore.firestore
 
 @Composable
 fun AccountScreen(modifier: Modifier) {
-    val viewmodel: ECartViewModel = viewModel()
-    LaunchedEffect(viewmodel.eCartState.value){
-        when(viewmodel.eCartState.value){
-           is ECartState.Unauthenticated -> {
-               GlobalNavigation.navController.navigate("auth")
-           }
-            else -> Unit
-        }
-    }
-    val viewModel: ECartViewModel= viewModel()
     var userData: UserModel? by remember { mutableStateOf(UserModel()) }
     val context = LocalContext.current
     var address by remember { mutableStateOf("") }
+    val expandable = remember { mutableStateOf(false) }
     LaunchedEffect(Unit){
-        Firebase.firestore.collection("users")
-            .document(FirebaseAuth.getInstance().currentUser?.uid!!).get().addOnCompleteListener {
-                if(it.isSuccessful){
-                   userData=it.result.toObject(UserModel()::class.java)
-                }
-            }
-    }
+        val doc= FirebaseAuth.getInstance().currentUser?.uid
+        if(doc!=null){
+                Firebase.firestore.collection("users")
+                    .document(doc).get().addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            userData = it.result.toObject(UserModel()::class.java)
+                        }
+                    }
+        }}
     Box(modifier = Modifier
         .fillMaxSize()
-        .padding(top = 30.dp)){
-        IconButton(onClick = {
-            viewModel.signOut()
-        }, modifier = Modifier
-            .align(alignment = Alignment.TopEnd)
-            .padding(16.dp)){
-            Icon(Icons.AutoMirrored.Filled.ExitToApp,null,
-                modifier = Modifier.size(50.dp))
+        .padding(top = 40.dp)){
+        Box(modifier = Modifier.wrapContentSize().align(alignment = Alignment.TopEnd)){
+            IconButton(onClick = {
+                expandable.value=true
+            }, modifier = Modifier.size(40.dp)){
+                Icon(Icons.Default.MoreVert,null, modifier = Modifier.size(40.dp)) }
+            DropdownMenu(expanded = expandable.value,
+                onDismissRequest = {expandable.value=false}){
+                DropdownMenuItem(text = {Text("Edit Profile")}, onClick = {
+                    GlobalNavigation.navController.navigate("edit")
+                }, leadingIcon = {Icon(Icons.Default.Edit,null)})
+                DropdownMenuItem(text = {Text("Signed Out")}, onClick = {
+                    FirebaseAuth.getInstance().signOut()
+                    val navController = GlobalNavigation.navController
+                    navController.popBackStack()
+                    navController.navigate("auth")
+                }, leadingIcon = {Icon(Icons.AutoMirrored.Filled.ExitToApp,null)})
+                DropdownMenuItem(text = {Text("Setting")}, onClick = {}, leadingIcon = {Icon(Icons.Default.Settings,null)})
+            }
         }
+
         Column(modifier.fillMaxSize(),
             horizontalAlignment =Alignment.CenterHorizontally ){
             Text("Profile",

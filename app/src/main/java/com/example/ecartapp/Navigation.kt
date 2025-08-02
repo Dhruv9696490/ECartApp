@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ecartapp.screens.AuthScreen
 import com.example.ecartapp.screens.CategoryItem
 import com.example.ecartapp.screens.CheckOutScreen
+import com.example.ecartapp.screens.EditScreen
 import com.example.ecartapp.screens.HomeScreen
 import com.example.ecartapp.screens.ItemScreen
 import com.example.ecartapp.screens.LoginScreen
@@ -43,6 +44,9 @@ fun Navigation(modifier: Modifier){
         }
         composable("check-out"){
             CheckOutScreen()
+        }
+        composable("edit"){
+            EditScreen()
         }
     }
 }
