@@ -15,13 +15,16 @@ import com.example.ecartapp.screens.HomeScreen
 import com.example.ecartapp.screens.ItemScreen
 import com.example.ecartapp.screens.LoginScreen
 import com.example.ecartapp.screens.SighUpScreen
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun Navigation(modifier: Modifier){
     val navController = rememberNavController()
     GlobalNavigation.navController = navController
     val viewModel: ECartViewModel = viewModel()
-    NavHost(navController,"auth"){
+    val isLoggedIn = FirebaseAuth.getInstance().currentUser != null
+    val startDestination = if (isLoggedIn) "home" else "auth"
+    NavHost(navController,startDestination){
         composable("auth"){
             AuthScreen(modifier, navController, viewModel)
         }

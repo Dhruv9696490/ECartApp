@@ -42,6 +42,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.ecartapp.ECartViewModel
 import com.example.ecartapp.GlobalNavigation
 import com.example.ecartapp.R
 import com.example.ecartapp.Utils
@@ -52,6 +54,7 @@ import com.google.firebase.firestore.firestore
 
 @Composable
 fun AccountScreen(modifier: Modifier) {
+    val viewmodel: ECartViewModel = viewModel()
     var userData: UserModel? by remember { mutableStateOf(UserModel()) }
     val context = LocalContext.current
     var address by remember { mutableStateOf("") }
@@ -80,10 +83,11 @@ fun AccountScreen(modifier: Modifier) {
                     GlobalNavigation.navController.navigate("edit")
                 }, leadingIcon = {Icon(Icons.Default.Edit,null)})
                 DropdownMenuItem(text = {Text("Signed Out")}, onClick = {
-                    FirebaseAuth.getInstance().signOut()
+                    viewmodel.signOut()
                     val navController = GlobalNavigation.navController
-                    navController.popBackStack()
-                    navController.navigate("auth")
+                    navController.navigate("auth"){
+                        popUpTo("home") { inclusive = true } // <-- Clears backstack
+                    }
                 }, leadingIcon = {Icon(Icons.AutoMirrored.Filled.ExitToApp,null)})
                 DropdownMenuItem(text = {Text("Setting")}, onClick = {}, leadingIcon = {Icon(Icons.Default.Settings,null)})
             }

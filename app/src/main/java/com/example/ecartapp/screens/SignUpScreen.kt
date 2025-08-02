@@ -38,6 +38,7 @@ import androidx.navigation.NavHostController
 import com.example.ecartapp.ECartState
 import com.example.ecartapp.ECartViewModel
 import com.example.ecartapp.R
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun SighUpScreen(modifier: Modifier, navController: NavHostController, viewModel: ECartViewModel){
@@ -48,7 +49,9 @@ fun SighUpScreen(modifier: Modifier, navController: NavHostController, viewModel
     val context =LocalContext.current
     LaunchedEffect(viewModel.eCartState.value){
         when(viewModel.eCartState.value){
-            is ECartState.Authenticated -> navController.navigate("home")
+            is ECartState.Authenticated -> if(FirebaseAuth.getInstance().currentUser!=null){
+                navController.navigate("home")
+            }
             is ECartState.Error -> Toast.makeText(context,(viewModel.eCartState.value as ECartState.Error).error, Toast.LENGTH_LONG).show()
             else -> Unit
         }

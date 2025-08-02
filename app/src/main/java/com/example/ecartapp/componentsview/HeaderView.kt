@@ -29,11 +29,15 @@ import com.google.firebase.firestore.firestore
 fun HeaderView(modifier: Modifier){
     var name by remember { mutableStateOf("") }
     LaunchedEffect(Unit){
-        Firebase.firestore.collection("users")
-            .document(FirebaseAuth.getInstance().currentUser?.uid!!)
-            .get().addOnCompleteListener{
+        val user = FirebaseAuth.getInstance().currentUser?.uid
+        if (!user.isNullOrEmpty()){
+            Firebase.firestore.collection("users")
+                .document(user)
+                .get().addOnCompleteListener{
                     name = it.result.get("name").toString().split(" ").get(0)
-            }
+                }
+        }
+
     }
     Row(modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,

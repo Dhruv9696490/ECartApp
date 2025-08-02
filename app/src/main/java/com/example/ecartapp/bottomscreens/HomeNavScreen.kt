@@ -38,8 +38,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.example.ecartapp.ECartState
+import com.example.ecartapp.ECartViewModel
 import com.example.ecartapp.GlobalNavigation
+import com.example.ecartapp.GlobalNavigation.navController
 import com.example.ecartapp.Utils
 import com.example.ecartapp.componentsview.BannerView
 import com.example.ecartapp.componentsview.CategoryView
@@ -50,6 +54,13 @@ import com.google.firebase.firestore.firestore
 
 @Composable
 fun HomeNavScreen(modifier: Modifier){
+    val viewModel: ECartViewModel =viewModel()
+    LaunchedEffect(viewModel.eCartState.value){
+        when(viewModel.eCartState.value){
+            is ECartState.Unauthenticated -> navController.navigate("auth")
+            else -> Unit
+        }
+    }
     var items by remember { mutableStateOf(listOf(CategoryModel())) }
     LaunchedEffect(Unit){
         Firebase.firestore.collection("data").document("icons").collection("products")

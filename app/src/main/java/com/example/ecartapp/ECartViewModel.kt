@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.ecartapp.model.UserModel
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 
@@ -12,18 +13,8 @@ import com.google.firebase.firestore.firestore
 class ECartViewModel: ViewModel() {
     val auth= Firebase.auth
     private val fireStore = Firebase.firestore
-    private val _eCartState = mutableStateOf<ECartState>(ECartState.Unauthenticated)
-    val eCartState: State<ECartState> = _eCartState
-    init {
-        checkUser()
-    }
-    fun checkUser(){
-        if(auth.currentUser==null){
-            _eCartState.value= ECartState.Unauthenticated
-        }else{
-            _eCartState.value= ECartState.Authenticated
-        }
-    }
+    private val _eCartState = mutableStateOf< ECartState?>(null)
+    val eCartState: State<ECartState?> = _eCartState
     fun sign(name: String,email: String,password: String,phoneNumber: String){
             _eCartState.value= ECartState.Loading
             auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener{result->
@@ -47,7 +38,7 @@ class ECartViewModel: ViewModel() {
     fun login(email: String,password: String){
         _eCartState.value= ECartState.Loading
         auth.signInWithEmailAndPassword(email,password).addOnCompleteListener{result->
-            if(result.isSuccessful){
+            if(result.isSuccessful && result.result!=null ){
                         _eCartState.value= ECartState.Authenticated
             }else{
                 _eCartState.value= ECartState.Error(result.exception?.message?: "404")
@@ -55,7 +46,7 @@ class ECartViewModel: ViewModel() {
         }
     }
     fun signOut(){
-        auth.signOut()
+        FirebaseAuth.getInstance().signOut()
         _eCartState.value= ECartState.Unauthenticated
     }
 }
