@@ -11,12 +11,12 @@ import androidx.compose.ui.Modifier
 import com.example.ecartapp.ui.theme.ECartAppTheme
 import com.razorpay.PaymentResultListener
 
-class MainActivity : ComponentActivity(), PaymentResultListener {
-    override fun onCreate(savedInstanceState: Bundle?) {
+class MainActivity : ComponentActivity(), PaymentResultListener{
+    override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ECartAppTheme {
+            ECartAppTheme{
                 Scaffold(modifier = Modifier.fillMaxSize()){ innerPadding ->
                     Navigation(Modifier.padding(innerPadding))
                 }
