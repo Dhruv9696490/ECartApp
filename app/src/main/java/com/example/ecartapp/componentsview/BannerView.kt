@@ -38,7 +38,7 @@ fun BannerView(modifier: Modifier= Modifier){
     val state = rememberPagerState(initialPage = 0, pageCount = { bannerItem.size })
     LaunchedEffect(bannerItem) {
         if (bannerItem.isNotEmpty()) {
-            while (true) {
+            while (true){
                 kotlinx.coroutines.delay(2000L)
                 val nextPage = (state.currentPage + 1) % bannerItem.size
                 state.animateScrollToPage(nextPage)
@@ -48,7 +48,7 @@ fun BannerView(modifier: Modifier= Modifier){
 
         Column(modifier){
             HorizontalPager(state =state, contentPadding = PaddingValues(vertical = 12.dp)){ it->
-                AsyncImage(model = if (bannerItem.size > 0) bannerItem.get(it) else "", "Image",
+                AsyncImage(model = if (bannerItem.isNotEmpty()) bannerItem[it] else "", "Image",
                     modifier = Modifier.fillMaxWidth().clip(
                         RoundedCornerShape(16.dp)
                     ))

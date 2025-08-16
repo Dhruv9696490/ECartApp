@@ -1,11 +1,14 @@
 package com.example.ecartapp
 
+import android.app.Activity
 import android.content.Context
 import android.widget.Toast
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
+import com.razorpay.Checkout
+import org.json.JSONObject
 
 object Utils {
     fun showToast(context: Context,message: String){
@@ -56,5 +59,18 @@ object Utils {
     }
     fun discountPercentage(): Float{
         return 13.0f
+    }
+    fun razorPayApi(): String{
+        return "rzp_test_R5xrWeqnTCCFY1"
+    }
+    fun startPayment(amount: Float){
+        val checkOut = Checkout()
+        checkOut.setKeyID(razorPayApi())
+        val options = JSONObject()
+        options.put("name","Easy Shop")
+        options.put("description","")
+        options.put(" ",amount*100)
+        options.put("currency","INR")
+         checkOut.open(GlobalNavigation.navController.context  as Activity,options)
     }
 }

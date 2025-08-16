@@ -45,6 +45,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
     androidTestImplementation(platform("com.google.firebase:firebase-bom:32.7.0"))
 
+    //RazorPay Dependency
+    implementation("com.razorpay:checkout:1.6.40")
     // Firebase libraries (without versions)
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")

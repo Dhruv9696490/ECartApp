@@ -60,7 +60,7 @@ fun CheckOutScreen() {
             if (it.isSuccessful) {
                 val value = it.result.toObject(UserModel::class.java)
                 if (value != null) {
-                    checkOutItems.value = value
+                    checkOutItems.                   value = value
                     Firebase.firestore.collection("data").document("icons")
                         .collection("products")
                         .whereIn("id", checkOutItems.value.cartItems.keys.toList()).get()
@@ -121,7 +121,9 @@ fun CheckOutScreen() {
         }
         HorizontalDivider()
         Spacer(modifier = Modifier.weight(1f))
-        Button(onClick = {},
+        Button(onClick = {
+             Utils.startPayment(total.value )
+        },
             modifier = Modifier.fillMaxWidth().height(60.dp)){
             Text("Pay: ₹"+total.value.toString(), fontSize =22.sp)
         }

@@ -33,11 +33,10 @@ fun HeaderView(modifier: Modifier){
         if (!user.isNullOrEmpty()){
             Firebase.firestore.collection("users")
                 .document(user)
-                .get().addOnCompleteListener{
-                    name = it.result.get("name").toString().split(" ").get(0)
+                .get().addOnSuccessListener{
+                    name = it.get("name").toString().split(" ")[0]
                 }
         }
-
     }
     Row(modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,

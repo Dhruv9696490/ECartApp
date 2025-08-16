@@ -22,7 +22,7 @@ fun Navigation(modifier: Modifier){
     val navController = rememberNavController()
     GlobalNavigation.navController = navController
     val viewModel: ECartViewModel = viewModel()
-    val isLoggedIn = FirebaseAuth.getInstance().currentUser != null
+    val isLoggedIn = FirebaseAuth.getInstance().currentUser?.uid != null
     val startDestination = if (isLoggedIn) "home" else "auth"
     NavHost(navController,startDestination){
         composable("auth"){

@@ -9,8 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import com.example.ecartapp.ui.theme.ECartAppTheme
+import com.razorpay.PaymentResultListener
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), PaymentResultListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -21,5 +22,13 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onPaymentSuccess(p0: String?) {
+        Utils.showToast(this,"Payment Success")
+    }
+
+    override fun onPaymentError(p0: Int, p1: String?) {
+        Utils.showToast(this,"Payment Failed")
     }
 }

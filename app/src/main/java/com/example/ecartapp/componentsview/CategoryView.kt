@@ -35,9 +35,9 @@ fun CategoryView(){
     var categories by remember {  mutableStateOf<List<IconCategoryModel>>(emptyList())}
     LaunchedEffect(Unit){
         Firebase.firestore.collection("data").document("icons").collection("categories")
-            .get().addOnCompleteListener {
-                categories = it.result.documents.mapNotNull {
-                    it.toObject(IconCategoryModel::class.java)
+            .get().addOnSuccessListener {
+                categories= it.documents.mapNotNull { item->
+                   item.toObject(IconCategoryModel::class.java)
                 }
             }
     }

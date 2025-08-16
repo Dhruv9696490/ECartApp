@@ -64,10 +64,8 @@ fun HomeNavScreen(modifier: Modifier){
     var items by remember { mutableStateOf(listOf(CategoryModel())) }
     LaunchedEffect(Unit){
         Firebase.firestore.collection("data").document("icons").collection("products")
-            .get().addOnCompleteListener {
-                if(it.isSuccessful){
-                    items=it.result.toObjects(CategoryModel::class.java).plus(it.result.toObjects(CategoryModel::class.java)).plus(it.result.toObjects(CategoryModel::class.java))
-                }
+            .get().addOnSuccessListener{
+                    items=it.toObjects(CategoryModel::class.java).plus(it.toObjects(CategoryModel::class.java)).plus(it.toObjects(CategoryModel::class.java))
             }
     }
     Column(Modifier.fillMaxSize().padding(top = 64.dp, start = 8.dp, end = 8.dp )){
@@ -100,7 +98,7 @@ fun HomeScreenItems(item: CategoryModel) {
         elevation = CardDefaults.cardElevation(8.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
     ){
-        Box(){
+        Box{
             IconButton(onClick = {}, modifier = Modifier.size(40.dp).align(alignment = Alignment.TopEnd)){
                 Icon(Icons.Default.FavoriteBorder,null,modifier = Modifier.size(30.dp))
             }

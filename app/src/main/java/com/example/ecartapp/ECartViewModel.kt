@@ -6,12 +6,11 @@ import androidx.lifecycle.ViewModel
 import com.example.ecartapp.model.UserModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 
 
 class ECartViewModel: ViewModel() {
-    val auth= Firebase.auth
+    val auth= FirebaseAuth.getInstance()
     private val fireStore = Firebase.firestore
     private val _eCartState = mutableStateOf< ECartState?>(null)
     val eCartState: State<ECartState?> = _eCartState
