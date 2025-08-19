@@ -50,7 +50,7 @@ fun SighUpScreen(modifier: Modifier, navController: NavHostController, viewModel
     LaunchedEffect(viewModel.eCartState.value){
         when(viewModel.eCartState.value){
             is ECartState.Authenticated -> if(FirebaseAuth.getInstance().currentUser!=null){
-                navController.navigate("home")
+                navController.navigate("home/${0}")
             }
             is ECartState.Error -> Toast.makeText(context,(viewModel.eCartState.value as ECartState.Error).error, Toast.LENGTH_LONG).show()
             else -> Unit

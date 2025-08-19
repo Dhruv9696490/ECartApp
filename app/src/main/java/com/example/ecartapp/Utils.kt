@@ -17,7 +17,7 @@ object Utils {
     fun addToCart(context: Context, id: String){
         val userDoc = Firebase.firestore.collection("users")
             .document(FirebaseAuth.getInstance().currentUser?.uid!!)
-        userDoc.get().addOnCompleteListener {
+        userDoc.get().addOnCompleteListener{
             if (it.isSuccessful) {
                 val cart = it.result.get("cartItems") as? Map<String, Long> ?: emptyMap()
                 val cartItem = cart[id] ?: 0
@@ -63,14 +63,27 @@ object Utils {
     fun razorPayApi(): String{
         return "rzp_test_R5xrWeqnTCCFY1"
     }
+    fun userId(): String{
+        return FirebaseAuth.getInstance().currentUser?.uid ?:""
+    }
     fun startPayment(amount: Float){
         val checkOut = Checkout()
         checkOut.setKeyID(razorPayApi())
         val options = JSONObject()
         options.put("name","Easy Shop")
         options.put("description","")
-        options.put(" ",amount*100)
+        options.put("amount",(amount*100).toInt())
         options.put("currency","INR")
          checkOut.open(GlobalNavigation.navController.context  as Activity,options)
+    }
+    fun removeItem(context: Context,id: String){
+        val firebase= Firebase.firestore.collection("users").document(userId())
+            firebase.update("favorite", FieldValue.arrayRemove(id)).addOnCompleteListener {
+                if(it.isSuccessful){
+                    showToast(context,"removed from favorite")
+                }else{
+                    showToast(context,"Error 404")
+                }
+            }
     }
 }

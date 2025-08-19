@@ -23,7 +23,7 @@ fun Navigation(modifier: Modifier){
     GlobalNavigation.navController = navController
     val viewModel: ECartViewModel = viewModel()
     val isLoggedIn = FirebaseAuth.getInstance().currentUser?.uid != null
-    val startDestination = if (isLoggedIn) "home" else "auth"
+    val startDestination = if (isLoggedIn) "home/${0}" else "auth"
     NavHost(navController,startDestination){
         composable("auth"){
             AuthScreen(modifier, navController, viewModel)
@@ -34,8 +34,9 @@ fun Navigation(modifier: Modifier){
         composable("sign"){
             SighUpScreen(modifier, navController, viewModel)
         }
-        composable("home"){
-            HomeScreen(modifier, navController, viewModel)
+        composable("home/{id}"){
+            val idNo = it.arguments?.getString("id")?.toIntOrNull() ?: 0
+            HomeScreen(modifier, navController, viewModel,idNo)
         }
         composable("category-item/{id}"){
             val id = it.arguments?.getString("id")?: ""
@@ -43,7 +44,7 @@ fun Navigation(modifier: Modifier){
         }
         composable("item-screen/{id}"){it->
             val id = it.arguments?.getString("id")?: ""
-            ItemScreen(modifier, id)
+            ItemScreen( id)
         }
         composable("check-out"){
             CheckOutScreen()

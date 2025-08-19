@@ -1,5 +1,6 @@
 package com.example.ecartapp.bottomscreens
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,14 +43,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.ecartapp.ECartState
 import com.example.ecartapp.ECartViewModel
-import com.example.ecartapp.GlobalNavigation
 import com.example.ecartapp.GlobalNavigation.navController
 import com.example.ecartapp.Utils
+import com.example.ecartapp.Utils.showToast
 import com.example.ecartapp.componentsview.BannerView
 import com.example.ecartapp.componentsview.CategoryView
 import com.example.ecartapp.componentsview.HeaderView
 import com.example.ecartapp.model.CategoryModel
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
 
 @Composable
@@ -92,14 +94,16 @@ fun HomeScreenItems(item: CategoryModel) {
             .padding(8.dp)
             .size(200.dp,300.dp)
             .clickable(onClick = {
-                GlobalNavigation.navController.navigate("item-screen/" + item.id)
+                navController.navigate("item-screen/" + item.id)
             }),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(8.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
     ){
         Box{
-            IconButton(onClick = {}, modifier = Modifier.size(40.dp).align(alignment = Alignment.TopEnd)){
+            IconButton(onClick = {
+                addItem(context,item.id)
+            }, modifier = Modifier.size(40.dp).align(alignment = Alignment.TopEnd)){
                 Icon(Icons.Default.FavoriteBorder,null,modifier = Modifier.size(30.dp))
             }
             Column(
@@ -128,7 +132,7 @@ fun HomeScreenItems(item: CategoryModel) {
                     Text("₹ ${item.realprice}", color = Color.DarkGray)
                     IconButton(onClick = {
                         Utils.addToCart(context, item.id)
-                    }) {
+                    }){
                         Icon(Icons.Default.ShoppingCart, null)
                     }
 
@@ -138,3 +142,14 @@ fun HomeScreenItems(item: CategoryModel) {
         }
     }
 }
+fun addItem(context: Context,id: String){
+       val firebase= Firebase.firestore.collection("users").document(Utils.userId())
+            firebase.update("favorite", FieldValue.arrayUnion(id)).addOnCompleteListener {
+                if(it.isSuccessful){
+                    showToast(context,"item added to favorite")
+                }else{
+                    showToast(context,"Error 404")
+
+              }
+            }
+    }

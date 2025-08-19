@@ -57,6 +57,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.ecartapp.GlobalNavigation
 import com.example.ecartapp.Utils
+import com.example.ecartapp.bottomscreens.addItem
 import com.example.ecartapp.model.CategoryModel
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -91,7 +92,7 @@ fun CategoryItem(modifier: Modifier, id: String){
     }
 }
 @Composable
-fun CategoryItemsScreen(item: CategoryModel) {
+fun CategoryItemsScreen(item: CategoryModel){
     val context = LocalContext.current
     Card(
         modifier = Modifier
@@ -105,7 +106,9 @@ fun CategoryItemsScreen(item: CategoryModel) {
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
     ){
         Box(){
-            IconButton(onClick = {}, modifier = Modifier.size(40.dp).align(alignment = Alignment.TopEnd)){
+            IconButton(onClick = {
+                addItem(context,item.id)
+            }, modifier = Modifier.size(40.dp).align(alignment = Alignment.TopEnd)){
                 Icon(Icons.Default.FavoriteBorder,null, modifier = Modifier.size(30.dp))
             }
             Column(
@@ -146,16 +149,16 @@ fun CategoryItemsScreen(item: CategoryModel) {
 }
 
 @Composable
-fun ItemScreen(modifier: Modifier,id: String){
+fun ItemScreen(id: String){
     val context = LocalContext.current
-    var category: CategoryModel? by remember { mutableStateOf(CategoryModel()) }
+    var category by remember { mutableStateOf(CategoryModel()) }
     LaunchedEffect(Unit){
         Firebase.firestore.collection("data").document("icons")
             .collection("products").document(id).get().addOnCompleteListener {
-                category=it.result.toObject(CategoryModel::class.java)
+                category=it.result.toObject(CategoryModel::class.java) as CategoryModel
             }
     }
-    val state = rememberPagerState(initialPage = 0, pageCount = { category?.image?.size ?: 0 })
+    val state = rememberPagerState(initialPage = 0, pageCount = { category.image.size  })
     Column(Modifier
         .fillMaxSize()
         .padding(16.dp)
@@ -168,7 +171,7 @@ fun ItemScreen(modifier: Modifier,id: String){
             pageSpacing = 34.dp
         ) { it ->
             AsyncImage(
-                model = category?.image?.get(it), null,
+                model = category.image[it], null,
                 modifier = Modifier
                     .height(320.dp)
                     .fillMaxWidth()
@@ -176,7 +179,7 @@ fun ItemScreen(modifier: Modifier,id: String){
             )
         }
         DotsIndicator(
-            dotCount = category?.image?.size ?: 0,
+            dotCount = category.image.size,
             type = ShiftIndicatorType(
                 dotsGraphic = DotGraphic(
                     color = MaterialTheme.colorScheme.primary,
@@ -186,18 +189,20 @@ fun ItemScreen(modifier: Modifier,id: String){
             pagerState = state
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(category?.name!!, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.SansSerif)
+        Text(category.name, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.SansSerif)
         Row(modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically){
-            Text("₹${category?.price}" ,
+            Text("₹${category.price}" ,
                 textDecoration = TextDecoration.LineThrough,
                 fontSize = 16.sp)
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                "₹${category?.realprice!!}", color = Color.DarkGray,
+                "₹${category.realprice}", color = Color.DarkGray,
                 fontSize = 23.sp)
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = {}){
+            IconButton(onClick = {
+                    addItem(context,id)
+            }){
                 Icon(Icons.Default.FavoriteBorder,null)
             }
         }
@@ -210,7 +215,7 @@ fun ItemScreen(modifier: Modifier,id: String){
             Text("Add To Cart", fontSize = 16.sp)
         }
         Spacer(Modifier.height(4.dp))
-        if (category!!.otherdetails.isNotEmpty()){
+        if (category.otherdetails.isNotEmpty()){
             Text(
                 "Other Details-",
                 fontSize = 24.sp,
@@ -218,7 +223,7 @@ fun ItemScreen(modifier: Modifier,id: String){
                 fontFamily = FontFamily.SansSerif
             )
             Spacer(Modifier.height(4.dp))
-            category?.otherdetails?.mapNotNull {
+            category.otherdetails.mapNotNull {
                 Text(text = buildAnnotatedString {
                     withStyle(
                         style = SpanStyle(
@@ -242,7 +247,7 @@ fun ItemScreen(modifier: Modifier,id: String){
         Spacer(Modifier.height(4.dp))
        Text("Description-", fontSize = 24.sp, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.SansSerif)
         Spacer(Modifier.height(4.dp))
-        Text(category?.description!!,
+        Text(category.description,
             textAlign = TextAlign.Justify,
             fontFamily = FontFamily.SansSerif,
             fontSize = 16.sp)

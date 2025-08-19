@@ -6,5 +6,6 @@ data class UserModel(
     val uid: String="",
     val cartItems: Map<String, Long> = mapOf(),
     val address: String="",
-    val phoneNumber: String=""
+    val phoneNumber: String="",
+    val favorite: List<String> = emptyList()
 )

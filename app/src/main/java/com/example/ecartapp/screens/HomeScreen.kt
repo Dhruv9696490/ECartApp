@@ -26,14 +26,14 @@ import com.example.ecartapp.bottomscreens.FavoriteScreen
 import com.example.ecartapp.bottomscreens.HomeNavScreen
 
 @Composable
-fun HomeScreen(modifier: Modifier, navController: NavHostController, viewModel: ECartViewModel){
+fun HomeScreen(modifier: Modifier, navController: NavHostController, viewModel: ECartViewModel,no: Int){
     val bottomBar = listOf<BottomBar>(
         BottomBar(Icons.Default.Home,"Home"),
         BottomBar(Icons.Default.Favorite,"Favorite"),
         BottomBar(Icons.Default.ShoppingCart,"Cart"),
         BottomBar(Icons.Default.AccountCircle,"Profile"),
     )
-    var indexOf by rememberSaveable { mutableIntStateOf(0) }
+    var indexOf by rememberSaveable { mutableIntStateOf(no) }
     Scaffold(
         bottomBar = {
             NavigationBar{
@@ -48,7 +48,7 @@ fun HomeScreen(modifier: Modifier, navController: NavHostController, viewModel: 
             }
         }
     ){
-        ContentScreen(modifier.padding(it),indexOf)
+        ContentScreen(Modifier.padding(it),indexOf)
     }
 }
 @Composable

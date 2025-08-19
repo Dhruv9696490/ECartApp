@@ -19,7 +19,7 @@ class ECartViewModel: ViewModel() {
             auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener{result->
                 if(result.isSuccessful){
                     val uid = result.result?.user?.uid
-                    val userModel = UserModel(name,email,uid!!,emptyMap(),phoneNumber,)
+                    val userModel = UserModel(name,email,uid!!,emptyMap(),phoneNumber)
                     fireStore.collection("users").document(uid).set(userModel)
                         .addOnCompleteListener {result->
                             if (result.isSuccessful){
