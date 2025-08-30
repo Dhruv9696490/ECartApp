@@ -9,10 +9,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ecartapp.GlobalNavigation
 import com.example.ecartapp.Utils
 import com.example.ecartapp.model.CategoryModel
 import com.example.ecartapp.model.UserModel
@@ -79,9 +85,14 @@ fun CheckOutScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 56.dp, start = 8.dp, end = 8.dp, bottom = 30.dp)
+            .padding(top = 35.dp, start = 8.dp, end = 8.dp, bottom = 30.dp)
             .verticalScroll(state = rememberScrollState())
     ) {
+        IconButton(onClick = { GlobalNavigation.navController.navigateUp()},
+            modifier = Modifier.size(50.dp).padding(bottom = 8.dp)){
+            Icon(Icons.AutoMirrored.Filled.ArrowBack,null,
+                modifier = Modifier.size(40.dp))
+        }
         Text("Deliver To:", fontSize = 22.sp, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.SansSerif)
         HorizontalDivider()
         Spacer(modifier = Modifier.height(8.dp))

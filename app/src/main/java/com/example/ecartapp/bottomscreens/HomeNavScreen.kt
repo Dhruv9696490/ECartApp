@@ -1,6 +1,7 @@
 package com.example.ecartapp.bottomscreens
 
 import android.content.Context
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,9 +16,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -34,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -101,11 +104,6 @@ fun HomeScreenItems(item: CategoryModel) {
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
     ){
         Box{
-            IconButton(onClick = {
-                addItem(context,item.id)
-            }, modifier = Modifier.size(40.dp).align(alignment = Alignment.TopEnd)){
-                Icon(Icons.Default.FavoriteBorder,null,modifier = Modifier.size(30.dp))
-            }
             Column(
                 modifier = Modifier.padding(top = 30.dp),
                 verticalArrangement = Arrangement.Center,
@@ -116,7 +114,12 @@ fun HomeScreenItems(item: CategoryModel) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
+                        .graphicsLayer(
+                            scaleX = -1.2f,
+                            scaleY = 1.2f
+                        )
                 )
+                Spacer(modifier = Modifier.height(20.dp))
                 Text(
                     item.name,
                     fontWeight = FontWeight.SemiBold,
@@ -139,17 +142,24 @@ fun HomeScreenItems(item: CategoryModel) {
                 }
 
             }
+            IconButton(onClick = {
+                addItem(context,item.id)
+            }, modifier = Modifier.size(40.dp).align(alignment = Alignment.TopEnd)
+                .background(Color.White, CircleShape)
+            ){
+                Icon(Icons.Default.Favorite,null,modifier = Modifier.size(30.dp),
+                    tint = Color.DarkGray)
+            }
         }
     }
 }
 fun addItem(context: Context,id: String){
-       val firebase= Firebase.firestore.collection("users").document(Utils.userId())
-            firebase.update("favorite", FieldValue.arrayUnion(id)).addOnCompleteListener {
+       val firebase = Firebase.firestore.collection("users").document(Utils.userId())
+            firebase.update("favorite", FieldValue.arrayUnion(id)).addOnCompleteListener{
                 if(it.isSuccessful){
                     showToast(context,"item added to favorite")
                 }else{
                     showToast(context,"Error 404")
-
               }
             }
     }

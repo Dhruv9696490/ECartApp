@@ -48,7 +48,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun FavoriteScreen(modifier: Modifier) {
+fun FavoriteScreen(modifier: Modifier){
     val context = LocalContext.current
     var favItems by remember { mutableStateOf<List<String>>(emptyList()) }
     LaunchedEffect(Unit){
@@ -64,7 +64,7 @@ fun FavoriteScreen(modifier: Modifier) {
         }
     }
     Column(Modifier.fillMaxSize().padding(top=40.dp, bottom = 100.dp)){
-        Text("Favorite Items-",
+        Text(" Favorite Items-",
             fontSize = 24.sp,
             fontWeight = FontWeight.SemiBold,
             fontFamily = FontFamily.SansSerif)

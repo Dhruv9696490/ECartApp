@@ -1,5 +1,6 @@
 package com.example.ecartapp.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,9 +21,12 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
@@ -41,8 +45,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -82,12 +86,20 @@ fun CategoryItem(modifier: Modifier, id: String){
 
             }
     }
-    LazyVerticalGrid(GridCells.Fixed(2),
-        modifier = modifier
-            .fillMaxSize()
-            .padding(8.dp)){
-        items(categoryData){it->
-            CategoryItemsScreen(it)
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(top = 36.dp)){
+        IconButton(onClick = { GlobalNavigation.navController.navigateUp()},
+            modifier = Modifier
+                .size(40.dp)
+                .padding(0.dp)){
+            Icon(Icons.AutoMirrored.Filled.ArrowBack,null,
+                modifier = Modifier.size(40.dp))
+        }
+        LazyVerticalGrid(GridCells.Fixed(2)){
+            items(categoryData){it->
+                CategoryItemsScreen(it)
+            }
         }
     }
 }
@@ -97,7 +109,7 @@ fun CategoryItemsScreen(item: CategoryModel){
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .size(200.dp,300.dp)
+            .size(200.dp, 300.dp)
             .clickable(onClick = {
                 GlobalNavigation.navController.navigate("item-screen/" + item.id)
             }),
@@ -105,32 +117,39 @@ fun CategoryItemsScreen(item: CategoryModel){
         elevation = CardDefaults.cardElevation(8.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
     ){
-        Box(){
-            IconButton(onClick = {
-                addItem(context,item.id)
-            }, modifier = Modifier.size(40.dp).align(alignment = Alignment.TopEnd)){
-                Icon(Icons.Default.FavoriteBorder,null, modifier = Modifier.size(30.dp))
-            }
+        Box() {
+//            IconButton(onClick = {
+//                addItem(context,item.id)
+//            }, modifier = Modifier.size(40.dp).align(alignment = Alignment.TopEnd)){
+//                Icon(Icons.Default.FavoriteBorder,null, modifier = Modifier.size(30.dp))
+//            }
             Column(
                 modifier = Modifier.padding(top = 30.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 AsyncImage(
                     item.image.firstOrNull(), null,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
+                        .graphicsLayer(
+                            scaleX = -1.2f,
+                            scaleY = 1.2f
+                        )
                 )
                 Text(
                     item.name,
                     fontWeight = FontWeight.SemiBold,
                     textAlign = TextAlign.Center,
                     overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
+                    maxLines = 1,
+                    modifier = Modifier.background(Color.White).padding(top = 4.dp)
                 )
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -144,9 +163,21 @@ fun CategoryItemsScreen(item: CategoryModel){
                 }
 
             }
-        }
-    }
-}
+            IconButton(
+                onClick = { addItem(context, item.id) },
+                modifier = Modifier
+                    .align(Alignment.TopEnd).size(30.dp) // top-right corner
+                    .padding(0.dp)
+                    .background(Color.White, CircleShape)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Favorite, // filled heart
+                    contentDescription = "Like",
+                    tint = Color.DarkGray,
+                    modifier = Modifier.size(30.dp)
+                )
+            }
+        }}   }
 
 @Composable
 fun ItemScreen(id: String){
@@ -161,7 +192,7 @@ fun ItemScreen(id: String){
     val state = rememberPagerState(initialPage = 0, pageCount = { category.image.size  })
     Column(Modifier
         .fillMaxSize()
-        .padding(16.dp)
+        .padding(top = 40.dp, start = 8.dp, end = 8.dp, bottom = 8.dp)
         .verticalScroll(state = rememberScrollState())) {
 
         HorizontalPager(
@@ -175,7 +206,10 @@ fun ItemScreen(id: String){
                 modifier = Modifier
                     .height(320.dp)
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
+                    .graphicsLayer(
+                        scaleX = -1.4f,
+                        scaleY = 1.4f
+                    )
             )
         }
         DotsIndicator(
@@ -188,7 +222,7 @@ fun ItemScreen(id: String){
             ),
             pagerState = state
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(22.dp))
         Text(category.name, fontSize = 20.sp, fontWeight = FontWeight.SemiBold, fontFamily = FontFamily.SansSerif)
         Row(modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically){

@@ -43,6 +43,7 @@ android {
 dependencies {
     // Firebase BoM ensures all Firebase libraries are version-aligned
     implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+    implementation(libs.androidx.foundation)
     androidTestImplementation(platform("com.google.firebase:firebase-bom:32.7.0"))
 
     //RazorPay Dependency

@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -62,7 +63,7 @@ fun CartScreen(modifier: Modifier) {
     }
     Column(modifier
         .fillMaxSize()){
-        Text("Cart Items-",
+        Text(" Cart Items-",
             fontSize = 24.sp,
             fontWeight = FontWeight.SemiBold,
             fontFamily = FontFamily.SansSerif)
@@ -104,8 +105,31 @@ fun CartItemScreen(id: String,quantity: Long){
                 .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
+            if(cartItem?.name=="Apple MacBook Pro"){
                 AsyncImage(model = cartItem?.image?.firstOrNull(), null,
-                    modifier = Modifier.size(120.dp))
+                    modifier = Modifier.size(120.dp)
+                        .graphicsLayer(
+                            scaleX = -1.1f,
+                            scaleY =  1.1f
+                        ))
+            }
+            else if(cartItem?.name=="Apple iPhone 16 (Black, 128 GB)"){
+                AsyncImage(model = cartItem?.image?.firstOrNull(), null,
+                    modifier = Modifier.size(120.dp)
+                        .graphicsLayer(
+                            scaleX = -1.3f,
+                            scaleY =  1.3f
+                        ))
+            }
+                else{
+            AsyncImage(model = cartItem?.image?.firstOrNull(), null,
+                modifier = Modifier.size(120.dp)
+                    .graphicsLayer(
+                        scaleX = -1f,
+                        scaleY = 1f
+                    ))
+            }
+
             Column(modifier = Modifier.weight(1f).padding(8.dp)){
                 Text(cartItem?.name!!, fontWeight = FontWeight.SemiBold,
                     maxLines = 1, overflow = TextOverflow.Ellipsis)

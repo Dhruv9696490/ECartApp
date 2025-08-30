@@ -1,16 +1,22 @@
 package com.example.ecartapp.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,16 +52,20 @@ fun EditScreen(){
                 }
             }
     }
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(30.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+                .padding(top = 35.dp, start = 20.dp, end = 20.dp)
+        ){
+            IconButton(onClick = { GlobalNavigation.navController.navigateUp()},
+                modifier = Modifier.size(40.dp).padding(0.dp).align(Alignment.TopStart)){
+                Icon(Icons.AutoMirrored.Filled.ArrowBack,null,
+                    modifier = Modifier.size(40.dp))
+            }
             Card(modifier = Modifier
                 .wrapContentSize()
-                .padding(8.dp),
+                .padding(8.dp)
+                .align(Alignment.Center),
                 elevation = CardDefaults.cardElevation(defaultElevation = 12.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)){
                 Column(
